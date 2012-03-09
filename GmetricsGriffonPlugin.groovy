@@ -21,7 +21,7 @@ class GmetricsGriffonPlugin {
     // the plugin version
     String version = '0.4'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5-SNAPSHOT > *'
+    String griffonVersion = '0.9.5 > *'
     // the other plugins this plugin depends on
     Map dependsOn = [:]
     // resources that are included in plugin packaging
