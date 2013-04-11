@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 the original author or authors.
+ * Copyright 2010-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@
  */
 class GmetricsGriffonPlugin {
     // the plugin version
-    String version = '0.5'
+    String version = '1.0.0'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '1.0.0 > *'
+    String griffonVersion = '1.2.0 > *'
     // the other plugins this plugin depends on
     Map dependsOn = [:]
     // resources that are included in plugin packaging
@@ -51,16 +51,16 @@ class GmetricsGriffonPlugin {
     String title = 'Code metrics plugin'
     // accepts Markdown syntax. See http://daringfireball.net/projects/markdown/ for details
     String description = '''
-The GMetrics Plugin provides provides calculation and reporting of size and complexity metrics
-for Groovy source code. It uses the [GMetrics][1] library. It began as a port of the [Grails GMetrics][2]
-plugin created by Scott Ryan.
+The GMetrics Plugin provides provides calculation and reporting of size and
+complexity metrics for Groovy source code. It uses the [GMetrics][1] library.
+It began as a port of the [Grails GMetrics][2] plugin created by Scott Ryan.
 
 Usage
-----
-The plugin provides a script 'gmetrics' that will analyze your code and write its results to an HTML file.
-Run the following command
+----_
+The plugin provides a script 'gmetrics' that will analyze your code and write
+its results to an HTML file. Run the following command
 
-        griffon gmetrics
+    griffon gmetrics
 
 to perform the analysis.
 
@@ -74,8 +74,9 @@ The plugin requires no customization to run. By default it will analyze all Groo
  * griffon-app/views
  * griffon-app/services
 
-You can restrict which folders are included or add extra ones. The following table lists settings that
-will be read from `griffon-app/conf/BuildConfig.groovy` and used if available:
+You can restrict which folders are included or add extra ones. The following
+table lists settings that will be read from `griffon-app/conf/BuildConfig.groovy`
+and used if available:
 
 | *Property*                      | *Default Value*                           | *Meaning*                                            |
 | ------------------------------- | ----------------------------------------- | ---------------------------------------------------- |
@@ -94,39 +95,42 @@ will be read from `griffon-app/conf/BuildConfig.groovy` and used if available:
 | gmetrics.metricSetFile          | none                                      | additional metrics to run on the source              |
 
 ### C.R.A.P. Metrics
-[C.R.A.P.][3] stands for `Change Risk Anti-Patterns`. You can enable this metric by defining a value for `gmetrics.metricSetFile`.
-Follow these steps to get basic C.R.A.P. metrics on your application.
+
+[C.R.A.P.][3] stands for `Change Risk Anti-Patterns`. You can enable this metric
+by defining a value for `gmetrics.metricSetFile`. Follow these steps to get basic
+C.R.A.P. metrics on your application.
 
 1. Create a new file that will hold the metric definitions, for example `crap.gmetrics`.
 2. Paste the following code into the newly create file
 
-        import org.gmetrics.metric.cyclomatic.CyclomaticComplexityMetric
-        final COBERTURA_FILE = 'file:target/test-reports/cobertura/coverage.xml'
-        metricset {
-            def cyclomaticComplexityMetric = metric(CyclomaticComplexityMetric)
-            def coberturaMetric = CoberturaLineCoverage {
-                coberturaFile = COBERTURA_FILE
-                functions = ['total']
-            }
-            CRAP {
-                functions = ['total']
-                coverageMetric = coberturaMetric
-                complexityMetric = cyclomaticComplexityMetric
-            }
+    import org.gmetrics.metric.cyclomatic.CyclomaticComplexityMetric
+    final COBERTURA_FILE = 'file:target/test-reports/cobertura/coverage.xml'
+    metricset {
+        def cyclomaticComplexityMetric = metric(CyclomaticComplexityMetric)
+        def coberturaMetric = CoberturaLineCoverage {
+            coberturaFile = COBERTURA_FILE
+            functions = ['total']
         }
+        CRAP {
+            functions = ['total']
+            coverageMetric = coberturaMetric
+            complexityMetric = cyclomaticComplexityMetric
+        }
+    }
 
-3. Add the file to the gmetrics configuration block in `BuildConfing.groovy` (pay attention to the relative path)
+3. Add the file to the gmetrics configuration block in `BuildConfing.groovy`
+   (pay attention to the relative path)
 
-        gmtetrics.metricSetFile = 'file:crap.gmetrics'
+    gmtetrics.metricSetFile = 'file:crap.gmetrics'
 
 4. Install the [code-coverage][4] plugin.
 5. Run tests with coverage enabled
 
-        griffon test-app -coverage
-        
+    griffon test-app -coverage
+
 6. Run gmetrics after coverage has been stored
 
-        griffon gmetrics
+    griffon gmetrics
 
 [1]: http://gmetrics.sourceforge.net
 [2]: http://grails.org/plugin/gmetrics
